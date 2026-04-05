@@ -136,6 +136,25 @@ describe('Home Page', () => {
     });
   });
 
+  it('handles scan error fallback without provided error message', async () => {
+    const mockScanData = { success: false };
+    (global.fetch as any).mockResolvedValueOnce({
+      json: async () => mockScanData
+    });
+
+    render(<Page />);
+    
+    const input = screen.getByPlaceholderText(/Paste BSC wallet address/i);
+    const btn = screen.getByText('🔥 Roast My Bag');
+
+    fireEvent.change(input, { target: { value: '0x1234567890123456789012345678901234567890' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Failed to scan wallet')).toBeInTheDocument();
+    });
+  });
+
   it('handles roast error fallback', async () => {
     const mockScanData = { success: true, data: { jeetScore: 80 } };
     const mockRoastData = { success: false, error: 'Roast Failed' };
@@ -158,6 +177,31 @@ describe('Home Page', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Roast Failed')).toBeInTheDocument();
+    });
+  });
+
+  it('handles roast error fallback without provided error message', async () => {
+    const mockScanData = { success: true, data: { jeetScore: 80 } };
+    const mockRoastData = { success: false };
+
+    (global.fetch as any)
+      .mockResolvedValueOnce({
+        json: async () => mockScanData
+      })
+      .mockResolvedValueOnce({
+        json: async () => mockRoastData
+      });
+
+    render(<Page />);
+    
+    const input = screen.getByPlaceholderText(/Paste BSC wallet address/i);
+    const btn = screen.getByText('🔥 Roast My Bag');
+
+    fireEvent.change(input, { target: { value: '0x1234567890123456789012345678901234567890' } });
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Failed to generate AI roast')).toBeInTheDocument();
     });
   });
 
@@ -279,6 +323,10 @@ describe('Home Page', () => {
 
     // Just testing it doesn't crash
     expect(screen.getByText('Scanning...')).toBeInTheDocument();
+
+    await act(async () => {
+      vi.advanceTimersByTime(6000); // Exceed duration to complete requestAnimationFrame
+    });
 
     vi.useRealTimers();
   });

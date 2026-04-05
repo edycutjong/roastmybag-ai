@@ -125,4 +125,15 @@ describe('POST /api/roast', () => {
     expect(json.demo).toBe(true);
     expect(json.data).toEqual(DEMO_PROFILES[0].roast);
   });
+
+  it('returns fallback demo profile if stats totalMissedUsd does not match', async () => {
+    delete process.env.OPENAI_API_KEY;
+    const req = createRequest({ stats: { ...validStats, totalMissedUsd: 999999999 } });
+    const res = await POST(req);
+    const json = await res.json();
+
+    expect(json.demo).toBe(true);
+    expect(json.data.script).toBeDefined();
+    expect(fetch).not.toHaveBeenCalled();
+  });
 });
