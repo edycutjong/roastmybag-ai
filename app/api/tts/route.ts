@@ -7,6 +7,13 @@ import { generateSpeech } from '@/lib/elevenlabs';
  */
 export async function POST(req: NextRequest) {
   try {
+    if (!process.env.ELEVENLABS_API_KEY) {
+      return NextResponse.json(
+        { error: 'TTS not available — API key not configured' },
+        { status: 503 }
+      );
+    }
+
     const { text } = await req.json();
 
     if (!text || typeof text !== 'string') {
