@@ -91,10 +91,10 @@ describe('sfx-engine', () => {
   });
 
   it('catches exceptions when AudioContext methods throw', () => {
-    const MockAudioContextClass = vi.fn().mockImplementation(() => ({
-      createBuffer: vi.fn().mockImplementation(() => { throw new Error('Mock error'); }),
-      createOscillator: vi.fn().mockImplementation(() => { throw new Error('Mock error'); }),
-    }));
+    class MockAudioContextClass {
+      createBuffer() { throw new Error('Mock error'); }
+      createOscillator() { throw new Error('Mock error'); }
+    }
     // @ts-ignore
     global.window = { AudioContext: MockAudioContextClass };
     // @ts-ignore
