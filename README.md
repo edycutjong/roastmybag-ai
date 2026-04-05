@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💀 RoastMyBag.ai
 
-## Getting Started
+> "In crypto, there are two kinds of people... Diamond hands... and jeets. This is for the jeets."
 
-First, run the development server:
+**RoastMyBag.ai** is an AI voice agent that scans your BNB Chain wallet, calculates missed gains, and brutally roasts you for selling memecoins too early. Built for the **Four.Meme AI Sprint** on BNB Chain.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🔗 Live Demo
+*(Insert Live Vercel App Link Here)*
+
+---
+
+## 🎯 The Problem
+Every memecoin trader has a graveyard of sold-too-early bags. But calculating exactly how much money you left on the table requires manually sifting through block explorers, cross-referencing historical prices, and doing painful math. Portfolio trackers like DeBank show cold numbers — nobody shares a screenshot of their DeBank dashboard saying "look how I got rekt."
+
+There's a massive gap between the viral, emotionally-charged content that dominates Crypto Twitter and the dry, analytical tools available to traders. Missed gains are the #1 most viral content type in crypto, yet no product turns this shared pain into entertainment.
+
+## 💡 The Solution
+RoastMyBag.ai is an AI-powered "wallet comedian" that transforms your worst trades into personalized comedy.
+
+1. **Connect** — Paste any BNB Chain wallet address (or just type `demo`)
+2. **Scan** — Our engine fetches your full memecoin transaction history via BSCScan and calculates the exact USD you missed on every panic-sell using DexScreener pricing.
+3. **Calculate** — We compare sell prices with today's value to find your exact missed gains.
+4. **Roast** — GPT-4o generates a brutally funny, data-driven roast script. This isn't generic comedy — the AI knows the *exact* dollar amounts, token names, and timing of your worst decisions.
+5. **Listen** — ElevenLabs speaks the roast out loud with a sarcastic AI voice, synced to a visual experience with fire, confetti, and screen shakes.
+6. **Share** — A "Certificate of Jeeting" generates with your Jeet Score (0-100). Share it on X to spread the pain!
+
+## 🛠️ Technical Highlights
+- **Framework:** Next.js 16 App Router (TypeScript) deployed on Vercel.
+- **Data Layer:** BSCScan API (transaction history) + DexScreener API (live pricing).
+- **AI Brain:** GPT-4o (structured, data-driven comedy generation).
+- **Voice Agent:** ElevenLabs (sarcastic TTS).
+- **UI / UX:** Framer Motion (animations), Web Audio API (retro SFX), HTML5 Canvas (fire/confetti effects).
+- **Zero Smart Contracts:** All value delivered at the application layer, zero blockchain deployment risk.
+
+## 🚀 Getting Started
+
+To run this project locally, you will need the following API keys:
+- `BSCSCAN_API_KEY` (Get from BSCScan)
+- `OPENAI_API_KEY` (Get from OpenAI)
+- `ELEVENLABS_API_KEY` (Get from ElevenLabs)
+- `ELEVENLABS_VOICE_ID` (Optional - defaults to Adam `pNInz6obpgDQGcFmaJgB`)
+
+Create a `.env.local` file in the root directory:
+```env
+BSCSCAN_API_KEY=your_bscscan_api_key
+OPENAI_API_KEY=your_openai_api_key
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+ELEVENLABS_VOICE_ID=pNInz6obpgDQGcFmaJgB
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then run the development server:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000) with your browser to get roasted.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🏷️ Tags
+`ai`, `meme`, `web3`, `bnb-chain`, `four-meme`, `voice-ai`, `entertainment`, `social`, `viral`, `crypto`
