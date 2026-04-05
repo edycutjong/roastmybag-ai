@@ -529,20 +529,43 @@ function ResultsView({
     sfx.chime();
   }, []);
 
+  const speakFallback = useCallback(() => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+
+    // Stop anything currently speaking
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(roast.script);
+    utterance.rate = 1.1; // slightly faster for roast cadence
+    utterance.pitch = 0.9;
+
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+
+    window.speechSynthesis.speak(utterance);
+    setIsPlaying(true);
+  }, [roast.script]);
+
   const handlePlayAudio = useCallback(async () => {
-    if (audioUrl) {
-      if (audioRef.current) {
-        if (isPlaying) {
-          audioRef.current.pause();
-          setIsPlaying(false);
-        } else {
-          audioRef.current.play();
-          setIsPlaying(true);
-        }
+    // 1. If currently playing anything, pause/cancel it
+    if (isPlaying) {
+      if (audioRef.current && audioUrl) {
+        audioRef.current.pause();
+      } else if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
       }
+      setIsPlaying(false);
       return;
     }
 
+    // 2. If we already generated an AI audio URL, just play it
+    if (audioUrl && audioRef.current) {
+      audioRef.current.play();
+      setIsPlaying(true);
+      return;
+    }
+
+    // 3. Fallback/Fetch logic
     setAudioLoading(true);
     try {
       const res = await fetch('/api/tts', {
@@ -552,7 +575,9 @@ function ResultsView({
       });
 
       if (!res.ok) {
+        // Fallback to browser TTS if API fails (e.g. no API key configured)
         setAudioLoading(false);
+        speakFallback();
         return;
       }
 
@@ -561,14 +586,31 @@ function ResultsView({
       setAudioUrl(url);
       const audio = new Audio(url);
       audioRef.current = audio;
+      
       audio.onended = () => setIsPlaying(false);
+      audio.onerror = () => {
+        setIsPlaying(false);
+        speakFallback();
+      };
+      
       audio.play();
       setIsPlaying(true);
     } catch {
-      // TTS not available
+      // Fallback if network request outright fails
+      setAudioLoading(false);
+      speakFallback();
     }
     setAudioLoading(false);
-  }, [audioUrl, isPlaying, roast.script]);
+  }, [audioUrl, isPlaying, roast.script, speakFallback]);
+
+  // Clean up any speaking speech synthesis on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof window !== 'undefined' && window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
 
   return (
     <motion.div
