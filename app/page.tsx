@@ -1132,7 +1132,7 @@ export default function Home() {
         <p className="mt-1">
           Powered by{' '}
           <a
-            href="https://fourmeme.com/"
+            href="https://four.meme/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[var(--accent-fire)] hover:underline"
