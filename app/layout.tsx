@@ -57,8 +57,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-white font-[family-name:var(--font-heading)]">
+      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-white font-[family-name:var(--font-heading)]" suppressHydrationWarning>
         {children}
       </body>
     </html>
