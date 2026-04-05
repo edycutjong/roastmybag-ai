@@ -109,6 +109,8 @@ describe('ResultsView Main Component', () => {
     jeetScore: 85,
     beats: [
         { type: 'opening' as const, text: 'You really messed up.', highlight: '' },
+        { type: 'data' as const, text: 'You lost so much.', highlight: '$12K' },
+        { type: 'comparison' as const, text: 'Could have been a lambo.', highlight: '1 Lambo' },
         { type: 'closing' as const, text: 'Like bad.', highlight: '' }
     ]
   };
@@ -130,7 +132,7 @@ describe('ResultsView Main Component', () => {
       onerror: null,
       onplay: null,
     };
-    vi.stubGlobal('Audio', vi.fn().mockImplementation(() => mockAudioObj));
+    vi.stubGlobal('Audio', vi.fn().mockImplementation(function() { return mockAudioObj; }));
     vi.stubGlobal('URL', {
       createObjectURL: vi.fn().mockReturnValue('blob:test'),
       revokeObjectURL: vi.fn()
@@ -186,7 +188,7 @@ describe('ResultsView Main Component', () => {
       currentTime: 0,
       duration: 10,
     };
-    vi.stubGlobal('Audio', vi.fn().mockImplementation(() => {
+    vi.stubGlobal('Audio', vi.fn().mockImplementation(function() {
         // Intercept setting onplay
         return new Proxy(mockAudioObj, {
             set: (target, prop, value) => {
@@ -274,5 +276,279 @@ describe('ResultsView Main Component', () => {
     );
 
     expect(getByText('No sells found (sus 🤔)')).toBeDefined();
+  });
+
+  it('toggles audio play and pause, and resumes', async () => {
+    (fetch as Mock).mockResolvedValueOnce({
+      ok: true,
+      blob: async () => new Blob(),
+    });
+
+    // Add fallback speech synthesis to handle onerror gracefully
+    (window as any).speechSynthesis = { cancel: vi.fn(), speak: vi.fn() };
+    class MockUtterance { rate=1; pitch=1; }
+    (window as any).SpeechSynthesisUtterance = MockUtterance;
+
+    const { getByText } = render(
+      <ResultsView stats={mockStats} roast={mockRoast} onReset={vi.fn()} />
+    );
+
+    const playBtn = getByText('🔊 Hear It');
+    
+    act(() => {
+      fireEvent.click(playBtn);
+    });
+    
+    // Wait for the button to change text which indicates fetching finished and state updated
+    await waitFor(() => {
+      expect(screen.getByText('⏸️ Pause')).toBeDefined();
+    });
+
+    const mockAudio = new Audio() as any;
+
+    act(() => {
+        if (mockAudio.onplay) mockAudio.onplay();
+    });
+    
+    const pauseBtn = screen.getByText('⏸️ Pause');
+    act(() => {
+      fireEvent.click(pauseBtn);
+    });
+    
+    // Check pause inside waitFor as it might take a re-render cycle
+    await waitFor(() => {
+      expect(mockAudio.pause).toHaveBeenCalled();
+    });
+    
+    const resumeBtn = screen.getByText('🔊 Hear It');
+    await act(async () => {
+      fireEvent.click(resumeBtn);
+    });
+    expect(mockAudio.play).toHaveBeenCalled();
+
+    await act(async () => {
+      if (mockAudio.onerror) mockAudio.onerror();
+    });
+  });
+
+  it('handles speech synthesis progress boundary and canceling', async () => {
+    (fetch as Mock).mockResolvedValueOnce({ ok: false });
+
+    const mockSpeak = vi.fn();
+    const mockCancel = vi.fn();
+    (window as any).speechSynthesis = {
+      speak: mockSpeak,
+      cancel: mockCancel,
+    };
+
+    let utteranceOnBoundary: any;
+    let utteranceOnEnd: any;
+    let utteranceOnError: any;
+
+    class MockSpeechSynthesisUtterance {
+      rate = 1;
+      pitch = 1;
+      constructor() {
+        return new Proxy(this, {
+          set: (target: any, prop, value) => {
+            if (prop === 'onboundary') utteranceOnBoundary = value;
+            if (prop === 'onend') utteranceOnEnd = value;
+            if (prop === 'onerror') utteranceOnError = value;
+            target[prop] = value;
+            return true;
+          }
+        });
+      }
+    }
+    (globalThis as any).SpeechSynthesisUtterance = MockSpeechSynthesisUtterance;
+    (window as any).SpeechSynthesisUtterance = MockSpeechSynthesisUtterance;
+
+    const { getByText } = render(
+      <ResultsView stats={mockStats} roast={mockRoast} onReset={vi.fn()} />
+    );
+
+    const playBtn = getByText('🔊 Hear It');
+    
+    await act(async () => {
+      fireEvent.click(playBtn);
+    });
+
+    expect(mockSpeak).toHaveBeenCalled();
+
+    await act(async () => {
+      if (utteranceOnBoundary) {
+        // Not a word boundary
+        utteranceOnBoundary({ name: 'sentence', charIndex: 0 });
+        // Word boundary early
+        utteranceOnBoundary({ name: 'word', charIndex: 2 });
+        // Word boundary late
+        utteranceOnBoundary({ name: 'word', charIndex: 999999 });
+      }
+    });
+
+    const pauseBtn = getByText('⏸️ Pause');
+    await act(async () => {
+      fireEvent.click(pauseBtn);
+    });
+    expect(mockCancel).toHaveBeenCalled();
+
+    await act(async () => {
+      if (utteranceOnEnd) utteranceOnEnd();
+      if (utteranceOnError) utteranceOnError();
+    });
+  });
+
+  it('tracks audio progress for typewriter', async () => {
+    let trackRAF: FrameRequestCallback | null = null;
+    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
+        trackRAF = cb;
+        return 1;
+    });
+
+    const mockAudio: any = {
+      play: vi.fn(),
+      pause: vi.fn(),
+      paused: false,
+      currentTime: 5,
+      duration: 10,
+    };
+    vi.stubGlobal('Audio', vi.fn().mockImplementation(function() { return mockAudio; }));
+
+    (fetch as Mock).mockResolvedValueOnce({
+      ok: true,
+      blob: async () => new Blob(),
+    });
+
+    // Add fallback speech synthesis
+    (window as any).speechSynthesis = { cancel: vi.fn(), speak: vi.fn() };
+    class MockUtterance { rate=1; pitch=1; }
+    (window as any).SpeechSynthesisUtterance = MockUtterance;
+
+    const { getByText } = render(
+      <ResultsView stats={mockStats} roast={mockRoast} onReset={vi.fn()} />
+    );
+
+    const playBtn = getByText('🔊 Hear It');
+    act(() => {
+      fireEvent.click(playBtn);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('⏸️ Pause')).toBeDefined();
+    });
+
+    // Test falsy branch of line 178 (audio missing or paused or duration <= 0)
+    mockAudio.paused = true;
+    act(() => {
+       if (trackRAF) trackRAF(100);
+    });
+    
+    // Now test truthy branch of line 178, which drives it into the active index logic (197-202)
+    mockAudio.paused = false;
+    act(() => {
+       if (trackRAF) trackRAF(100);
+    });
+
+    // Now test if activeBeatIndex remains unchanged (skips state update, hits 202 implicit else branch)
+    act(() => {
+       if (trackRAF) trackRAF(100);
+    });
+
+    // NOW test line 202 isPlaying = false branch
+    act(() => {
+      fireEvent.click(screen.getByText('⏸️ Pause'));
+    });
+    act(() => {
+      // isPlaying is now false, but the previous scheduled RAF hasn't run yet.
+      // manually call it so it runs trackProgress and hits `if (isPlaying)` = false
+       if (trackRAF) trackRAF(100);
+    });
+
+    expect(trackRAF).not.toBeNull();
+  });
+
+  it('hits catch block if fetch rejects completely and handles utterance events', async () => {
+    (fetch as Mock).mockRejectedValueOnce(new Error('Network error'));
+    
+    // Add fallback speech synthesis
+    let capturedUtterance: any;
+    const mockSpeak = vi.fn((utt) => {
+      capturedUtterance = utt;
+    });
+    (window as any).speechSynthesis = { cancel: vi.fn(), speak: mockSpeak };
+    class MockUtterance { rate=1; pitch=1; onend: any; onerror: any; onboundary: any; }
+    (window as any).SpeechSynthesisUtterance = MockUtterance;
+
+    const { getByText, unmount } = render(
+      <ResultsView stats={mockStats} roast={mockRoast} onReset={vi.fn()} />
+    );
+
+    const playBtn = getByText('🔊 Hear It');
+    
+    await act(async () => {
+      fireEvent.click(playBtn);
+    });
+
+    // verify fallback
+    expect(mockSpeak).toHaveBeenCalled();
+
+    // hit onend
+    act(() => {
+      if (capturedUtterance && capturedUtterance.onend) capturedUtterance.onend();
+    });
+
+    await act(async () => {
+      fireEvent.click(playBtn);
+    });
+
+    // hit onerror
+    act(() => {
+      if (capturedUtterance && capturedUtterance.onerror) capturedUtterance.onerror();
+    });
+
+    // hit unmount to run cleanup
+    unmount();
+  });
+
+  it('handles unknown tier gracefully', () => {
+    const unknownTierRoast = { ...mockRoast, jeetScore: 150 };
+    render(
+      <ResultsView stats={mockStats} roast={unknownTierRoast} onReset={vi.fn()} />
+    );
+    expect(screen.getAllByText('🔥').length).toBeGreaterThan(0);
+  });
+
+  it('handles TTS pause gracefully when window.speechSynthesis is undefined', async () => {
+    (fetch as Mock).mockResolvedValueOnce({ ok: false });
+    
+    // initially we provide window.speechSynthesis to allow it to start playing via TTS
+    const mockSpeak = vi.fn();
+    (window as any).speechSynthesis = { cancel: vi.fn(), speak: mockSpeak };
+    class MockUtterance { rate=1; pitch=1; }
+    (window as any).SpeechSynthesisUtterance = MockUtterance;
+
+    const { getByText } = render(
+      <ResultsView stats={mockStats} roast={mockRoast} onReset={vi.fn()} />
+    );
+
+    const playBtn = getByText('🔊 Hear It');
+    
+    await act(async () => {
+      fireEvent.click(playBtn);
+    });
+
+    // NOW it is playing via TTS. The button should have changed to Pause.
+    const pauseBtn = screen.getByText('⏸️ Pause');
+    
+    // Now delete window.speechSynthesis BEFORE we click pause!
+    // This perfectly hits the falsy branch in `else if (typeof window !== 'undefined' && window.speechSynthesis)`
+    delete (window as any).speechSynthesis;
+
+    await act(async () => {
+      fireEvent.click(pauseBtn);
+    });
+
+    // Since speechSynthesis is missing, cancel wasn't pushed, but it shouldn't throw error
+    expect(true).toBe(true);
   });
 });

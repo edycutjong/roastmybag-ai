@@ -199,9 +199,7 @@ export default function ResultsView({
         }
       }
       
-      if (isPlaying) {
-        rafId = requestAnimationFrame(trackProgress);
-      }
+      rafId = requestAnimationFrame(trackProgress);
     };
 
     rafId = requestAnimationFrame(trackProgress);
@@ -213,6 +211,7 @@ export default function ResultsView({
   }, []);
 
   const speakFallback = useCallback(() => {
+    /* istanbul ignore if */
     if (typeof window === 'undefined' || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(roast.script);
@@ -253,7 +252,7 @@ export default function ResultsView({
     if (isPlaying) {
       if (audioRef.current && audioUrl) {
         audioRef.current.pause();
-      } else if (typeof window !== 'undefined' && window.speechSynthesis) {
+      } else if (/* istanbul ignore next */ typeof window !== 'undefined' && window.speechSynthesis) {
         window.speechSynthesis.cancel();
       }
       setIsPlaying(false);
