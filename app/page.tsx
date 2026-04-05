@@ -87,7 +87,7 @@ function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
       </div>
 
       <div className="w-72 space-y-2">
-        <div className="flex justify-between text-xs text-[var(--text-muted)]">
+        <div className="flex justify-between text-xs text-(--text-muted)">
           <span>{phase === 'scanning' ? 'Scanning' : 'Roasting'}...</span>
           <span>{progress}%</span>
         </div>
@@ -105,7 +105,7 @@ function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
       <AnimatePresence mode="wait">
         <motion.p
           key={msgIndex}
-          className="text-lg text-[var(--text-secondary)] font-medium text-center"
+          className="text-lg text-(--text-secondary) font-medium text-center"
           initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
           exit={{ opacity: 0, y: -10, filter: 'blur(4px)' }}
@@ -121,7 +121,7 @@ function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
 // ─── Footer Component ──────────────────────────────────────
 function Footer({ className = '' }: { className?: string }) {
   return (
-    <footer className={`relative z-10 text-center py-8 text-sm text-[var(--text-muted)] border-t border-white/5 ${className}`}>
+    <footer className={`relative z-10 text-center py-8 text-sm text-(--text-muted) border-t border-white/5 ${className}`}>
       <p>
         RoastMyBag.ai — Not financial advice. Just emotional damage. 💀
       </p>
@@ -131,7 +131,7 @@ function Footer({ className = '' }: { className?: string }) {
           href="https://four.meme/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[var(--accent-fire)] hover:underline"
+          className="text-(--accent-fire) hover:underline"
         >
           Four.Meme
         </a>{' '}
@@ -140,7 +140,7 @@ function Footer({ className = '' }: { className?: string }) {
           href="https://www.bnbchain.org"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[var(--accent-gold)] hover:underline"
+          className="text-(--accent-gold) hover:underline"
         >
           BNB Chain
         </a>
@@ -159,6 +159,7 @@ export default function Home() {
   const [showFlash, setShowFlash] = useState(false);
   const [shake, setShake] = useState(false);
   const { canvasRef, fire: fireConfetti } = useConfetti();
+  const cacheRef = useRef<Record<string, { stats: WalletStats; roast: RoastResult }>>({});
 
   const handleSubmit = useCallback(async () => {
     const trimmed = address.trim();
@@ -173,6 +174,23 @@ export default function Home() {
     }
 
     setError('');
+
+    if (cacheRef.current[targetAddress]) {
+      const cached = cacheRef.current[targetAddress];
+      setStats(cached.stats);
+      setRoast(cached.roast);
+      
+      sfx.impact();
+      setShowFlash(true);
+      setShake(true);
+      setTimeout(() => setShowFlash(false), 400);
+      setTimeout(() => setShake(false), 500);
+      fireConfetti();
+      
+      setPhase('results');
+      return;
+    }
+
     setPhase('scanning');
 
     try {
@@ -214,6 +232,7 @@ export default function Home() {
       }
 
       setRoast(roastData.data);
+      cacheRef.current[targetAddress] = { stats: scanData.data, roast: roastData.data };
 
       sfx.impact();
       setShowFlash(true);
@@ -263,7 +282,7 @@ export default function Home() {
           </motion.span>
           <span className="text-lg font-bold">
             <span className="fire-text">RoastMyBag</span>
-            <span className="text-[var(--text-muted)]">.ai</span>
+            <span className="text-(--text-muted)">.ai</span>
           </span>
         </motion.div>
         <div className="flex items-center gap-4">
@@ -271,7 +290,7 @@ export default function Home() {
             href="https://four.meme"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-[var(--text-muted)] hover:text-white transition-colors"
+            className="text-sm text-(--text-muted) hover:text-white transition-colors"
           >
             Built on Four.Meme
           </a>
@@ -319,14 +338,14 @@ export default function Home() {
                   </motion.span>
                 </h1>
                 <motion.p
-                  className="text-lg md:text-xl text-[var(--text-secondary)] max-w-xl mx-auto leading-relaxed"
+                  className="text-lg md:text-xl text-(--text-secondary) max-w-xl mx-auto leading-relaxed"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
                 >
                   Paste your BSC wallet. See exactly how much money you left on the table.
                   Get a{' '}
-                  <span className="text-[var(--accent-fire)] font-semibold">
+                  <span className="text-(--accent-fire) font-semibold">
                     savage, data-driven AI roast
                   </span>{' '}
                   of every token you paper-handed.
@@ -349,7 +368,7 @@ export default function Home() {
                     }}
                     onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
                     placeholder='Paste BSC wallet address or type "demo"'
-                    className="input-dark w-full px-6 py-5 text-lg font-[family-name:var(--font-mono)]"
+                    className="input-dark w-full px-6 py-5 text-lg font-mono"
                     id="wallet-input"
                     autoComplete="off"
                     spellCheck={false}
@@ -359,7 +378,7 @@ export default function Home() {
 
                 {error && (
                   <motion.p
-                    className="text-[var(--accent-red)] text-sm text-center"
+                    className="text-(--accent-red) text-sm text-center"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: [0, -4, 4, -3, 3, 0] }}
                     transition={{ duration: 0.4 }}
@@ -378,7 +397,7 @@ export default function Home() {
                   🔥 Roast My Bag
                 </motion.button>
 
-                <p className="text-center text-sm text-[var(--text-muted)]">
+                <p className="text-center text-sm text-(--text-muted)">
                   Free • No wallet connection • View-only scan
                 </p>
               </motion.div>
@@ -416,7 +435,7 @@ export default function Home() {
                       {step.emoji}
                     </motion.div>
                     <h3 className="text-lg font-semibold text-white mb-1">{step.title}</h3>
-                    <p className="text-sm text-[var(--text-secondary)]">{step.desc}</p>
+                    <p className="text-sm text-(--text-secondary)">{step.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -427,9 +446,9 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1.3 }}
               >
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="text-sm text-(--text-muted)">
                   Built for the{' '}
-                  <span className="text-[var(--accent-fire)]">Four.Meme AI Sprint</span> on BNB
+                  <span className="text-(--accent-fire)">Four.Meme AI Sprint</span> on BNB
                   Chain
                 </p>
               </motion.div>

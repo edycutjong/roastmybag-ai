@@ -8,6 +8,493 @@ export interface DemoProfile {
 
 export const DEMO_PROFILES: DemoProfile[] = [
   {
+    "id": 90000,
+    "stats": {
+      "totalMissedUsd": 9,
+      "worstSell": {
+        "tokenName": "TEST0 Token",
+        "tokenSymbol": "TEST0",
+        "contractAddress": "0x0000",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 9,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc0"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST0 Token",
+          "tokenSymbol": "TEST0",
+          "contractAddress": "0x0000",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 9,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc0"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST0 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $9 today. You left $9 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST0 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $9 today.",
+          "highlight": "$9"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $9 on the table.",
+          "highlight": "$9"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90001,
+    "stats": {
+      "totalMissedUsd": 99,
+      "worstSell": {
+        "tokenName": "TEST1 Token",
+        "tokenSymbol": "TEST1",
+        "contractAddress": "0x0001",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 99,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc1"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST1 Token",
+          "tokenSymbol": "TEST1",
+          "contractAddress": "0x0001",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 99,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc1"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST1 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $99 today. You left $99 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST1 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $99 today.",
+          "highlight": "$99"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $99 on the table.",
+          "highlight": "$99"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90002,
+    "stats": {
+      "totalMissedUsd": 999,
+      "worstSell": {
+        "tokenName": "TEST2 Token",
+        "tokenSymbol": "TEST2",
+        "contractAddress": "0x0002",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc2"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST2 Token",
+          "tokenSymbol": "TEST2",
+          "contractAddress": "0x0002",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc2"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST2 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $999 today. You left $999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST2 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $999 today.",
+          "highlight": "$999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $999 on the table.",
+          "highlight": "$999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90003,
+    "stats": {
+      "totalMissedUsd": 9999,
+      "worstSell": {
+        "tokenName": "TEST3 Token",
+        "tokenSymbol": "TEST3",
+        "contractAddress": "0x0003",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 9999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc3"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST3 Token",
+          "tokenSymbol": "TEST3",
+          "contractAddress": "0x0003",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 9999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc3"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST3 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $9,999 today. You left $9,999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST3 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $9,999 today.",
+          "highlight": "$9,999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $9,999 on the table.",
+          "highlight": "$9,999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90004,
+    "stats": {
+      "totalMissedUsd": 99999,
+      "worstSell": {
+        "tokenName": "TEST4 Token",
+        "tokenSymbol": "TEST4",
+        "contractAddress": "0x0004",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 99999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc4"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST4 Token",
+          "tokenSymbol": "TEST4",
+          "contractAddress": "0x0004",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 99999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc4"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST4 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $99,999 today. You left $99,999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST4 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $99,999 today.",
+          "highlight": "$99,999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $99,999 on the table.",
+          "highlight": "$99,999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90005,
+    "stats": {
+      "totalMissedUsd": 999999,
+      "worstSell": {
+        "tokenName": "TEST5 Token",
+        "tokenSymbol": "TEST5",
+        "contractAddress": "0x0005",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 999999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc5"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST5 Token",
+          "tokenSymbol": "TEST5",
+          "contractAddress": "0x0005",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 999999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc5"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST5 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $999,999 today. You left $999,999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST5 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $999,999 today.",
+          "highlight": "$999,999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $999,999 on the table.",
+          "highlight": "$999,999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90006,
+    "stats": {
+      "totalMissedUsd": 9999999,
+      "worstSell": {
+        "tokenName": "TEST6 Token",
+        "tokenSymbol": "TEST6",
+        "contractAddress": "0x0006",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 9999999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc6"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST6 Token",
+          "tokenSymbol": "TEST6",
+          "contractAddress": "0x0006",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 9999999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc6"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST6 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $9,999,999 today. You left $9,999,999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST6 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $9,999,999 today.",
+          "highlight": "$9,999,999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $9,999,999 on the table.",
+          "highlight": "$9,999,999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90007,
+    "stats": {
+      "totalMissedUsd": 99999999,
+      "worstSell": {
+        "tokenName": "TEST7 Token",
+        "tokenSymbol": "TEST7",
+        "contractAddress": "0x0007",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 99999999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc7"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST7 Token",
+          "tokenSymbol": "TEST7",
+          "contractAddress": "0x0007",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 99999999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc7"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST7 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $99,999,999 today. You left $99,999,999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST7 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $99,999,999 today.",
+          "highlight": "$99,999,999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $99,999,999 on the table.",
+          "highlight": "$99,999,999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+  {
+    "id": 90008,
+    "stats": {
+      "totalMissedUsd": 999999999,
+      "worstSell": {
+        "tokenName": "TEST8 Token",
+        "tokenSymbol": "TEST8",
+        "contractAddress": "0x0008",
+        "amountSold": 1000,
+        "sellPrice": 1.0,
+        "currentPrice": 2.0,
+        "missedGains": 999999999,
+        "sellDate": "2026-04-01",
+        "txHash": "0xabc8"
+      },
+      "jeetScore": 99,
+      "tokensJeeted": 1,
+      "trades": [
+        {
+          "tokenName": "TEST8 Token",
+          "tokenSymbol": "TEST8",
+          "contractAddress": "0x0008",
+          "amountSold": 1000,
+          "sellPrice": 1.0,
+          "currentPrice": 2.0,
+          "missedGains": 999999999,
+          "sellDate": "2026-04-01",
+          "txHash": "0xabc8"
+        }
+      ]
+    },
+    "roast": {
+      "script": "Let me get this straight. You bought $TEST8 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $999,999,999 today. You left $999,999,999 on the table. Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+      "beats": [
+        {
+          "type": "opening",
+          "text": "Let me get this straight. You bought $TEST8 early, watched it pump, and STILL decided to sell for peanuts? That bag is worth $999,999,999 today.",
+          "highlight": "$999,999,999"
+        },
+        {
+          "type": "comparison",
+          "text": "You left $999,999,999 on the table.",
+          "highlight": "$999,999,999"
+        },
+        {
+          "type": "closing",
+          "text": "Congratulations — with a Jeet Score of 99 out of 100, you've earned the title of Test Edge Case.",
+          "highlight": "99/100"
+        }
+      ],
+      "title": "Test Edge Case",
+      "jeetScore": 99
+    }
+  },
+
+  {
     "id": 0,
     "stats": {
       "totalMissedUsd": 34964,
