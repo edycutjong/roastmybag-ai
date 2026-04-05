@@ -6,6 +6,14 @@
 
 [![CI](https://github.com/edycutjong/roastmybag-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions)
 
+<p align="center">
+  <a href="https://youtu.be/K9sz9dNHa3w">
+    <img src="docs/screenshots/01-landing.png" alt="RoastMyBag.ai Demo" width="720" />
+    <br/>
+    <b>▶️ Watch the Demo Video</b>
+  </a>
+</p>
+
 ---
 
 ## 🎯 The Problem
@@ -26,6 +34,29 @@ RoastMyBag.ai is an AI-powered **"wallet comedian"** that transforms your worst 
 4. **Roast** — GPT-4o generates a brutally funny, data-driven roast script. This isn't generic comedy — the AI knows the *exact* dollar amounts, token names, and timing of your worst decisions
 5. **Listen** — ElevenLabs speaks the roast out loud with a sarcastic AI voice, synced in real-time to visual beat cards with highlighted data points
 6. **Share** — One-click post to X with your Jeet Score, title, and total missed gains
+
+---
+
+## 📸 Screenshots
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/01-landing.png" alt="Landing" width="400" /></td>
+    <td><img src="docs/screenshots/02-scanning.png" alt="Scanning" width="400" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Landing — Wallet Input</b></td>
+    <td align="center"><b>Scanning Phase</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/03-results-viewport-v3.png" alt="Results" width="400" /></td>
+    <td><img src="docs/screenshots/04-results-fullpage-v3.png" alt="Damage Report" width="400" /></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Jeet Score & Roast Beats</b></td>
+    <td align="center"><b>Full Damage Report</b></td>
+  </tr>
+</table>
 
 ---
 
@@ -60,15 +91,15 @@ RoastMyBag.ai is an AI-powered **"wallet comedian"** that transforms your worst 
 ## 🛠️ Tech Stack
 
 | Layer | Technology |
-|-------|-----------|
-| **Framework** | Next.js 16 App Router (TypeScript, React 19) |
+|-------|-----------:|
+| **Framework** | Next.js 16.2 App Router (TypeScript, React 19) |
 | **Styling** | Tailwind CSS v4 + custom CSS (glassmorphism, fire gradients) |
-| **Animations** | Framer Motion + HTML5 Canvas (fire & confetti effects) |
+| **Animations** | Framer Motion 12 + HTML5 Canvas (fire & confetti effects) |
 | **Audio** | Web Audio API (retro SFX engine) + ElevenLabs TTS |
 | **Data** | BSCScan API (BEP-20 transfers) + DexScreener API (live pricing) |
 | **AI** | OpenAI GPT-4o (structured JSON comedy generation) |
 | **OG Images** | Satori + `next/og` (dynamic social cards) |
-| **Testing** | Vitest + Testing Library + v8 coverage (100% target) |
+| **Testing** | Vitest 4 + Testing Library + v8 coverage (100% target) |
 | **CI/CD** | GitHub Actions (typecheck → lint → test:coverage) |
 | **Deploy** | Vercel |
 
@@ -80,33 +111,39 @@ RoastMyBag.ai is an AI-powered **"wallet comedian"** that transforms your worst 
 roastmybag-ai/
 ├── app/
 │   ├── api/
-│   │   ├── scan/route.ts      # Wallet scanner (BSCScan + DexScreener)
-│   │   ├── roast/route.ts     # AI roast generator (GPT-4o)
-│   │   ├── tts/route.ts       # Voice synthesis (ElevenLabs)
-│   │   └── og/route.tsx       # Dynamic OG image generation
-│   ├── __tests__/             # Page & layout tests
-│   ├── globals.css            # Design system (CSS variables, fire effects)
-│   ├── layout.tsx             # Root layout (Space Grotesk + JetBrains Mono)
-│   └── page.tsx               # Main SPA (4-phase state machine)
+│   │   ├── scan/route.ts         # Wallet scanner (BSCScan + DexScreener)
+│   │   ├── roast/route.ts        # AI roast generator (GPT-4o)
+│   │   ├── tts/route.ts          # Voice synthesis (ElevenLabs)
+│   │   └── og/route.tsx          # Dynamic OG image generation
+│   ├── __tests__/                # Page & layout tests
+│   ├── globals.css               # Design system (CSS variables, fire effects)
+│   ├── layout.tsx                # Root layout (Space Grotesk + JetBrains Mono)
+│   └── page.tsx                  # Main SPA (4-phase state machine)
 ├── components/
-│   ├── __tests__/             # Component tests (100% coverage)
-│   ├── canvas-fire.tsx        # HTML5 Canvas fire background
-│   ├── confetti.tsx           # Confetti particle system
-│   ├── results-view.tsx       # Results dashboard (score ring, beats, damage report)
-│   └── sfx-engine.ts          # Web Audio API sound effects
+│   ├── __tests__/                # Component tests (100% coverage)
+│   ├── canvas-fire.tsx           # HTML5 Canvas fire background
+│   ├── confetti.tsx              # Confetti particle system
+│   ├── results-view.tsx          # Results dashboard (score ring, beats, damage report)
+│   └── sfx-engine.ts             # Web Audio API sound effects
 ├── lib/
-│   ├── __tests__/             # Library tests (100% coverage)
-│   ├── analyzer.ts            # Trade analysis engine (missed gains calc)
-│   ├── bscscan.ts             # BSCScan API client
-│   ├── constants.ts           # Jeet tiers, stablecoins, DEX routers, design tokens
-│   ├── demo-profiles.ts       # Pre-built demo wallet profiles
-│   ├── dexscreener.ts         # DexScreener price API client
-│   ├── elevenlabs.ts          # ElevenLabs TTS API client
-│   ├── roast-prompt.ts        # GPT-4o system prompt & message builder
-│   └── types.ts               # TypeScript interfaces
-├── public/                    # App icons (192, 512, apple-touch)
-├── .github/workflows/ci.yml   # CI pipeline
-├── vitest.config.ts           # Test configuration
+│   ├── __tests__/                # Library tests (100% coverage)
+│   ├── analyzer.ts               # Trade analysis engine (missed gains calc)
+│   ├── bscscan.ts                # BSCScan API client
+│   ├── constants.ts              # Jeet tiers, stablecoins, DEX routers, design tokens
+│   ├── demo-profiles.ts          # Pre-built demo wallet profiles
+│   ├── dexscreener.ts            # DexScreener price API client
+│   ├── elevenlabs.ts             # ElevenLabs TTS API client
+│   ├── roast-prompt.ts           # GPT-4o system prompt & message builder
+│   └── types.ts                  # TypeScript interfaces
+├── scripts/
+│   ├── capture-ss.mjs            # Automated screenshot capture (Playwright)
+│   └── capture-video.mjs         # Automated video recording (Playwright)
+├── docs/
+│   ├── demo.gif                  # Animated demo
+│   └── screenshots/              # App screenshots
+├── public/                       # App icons (192, 512, apple-touch)
+├── .github/workflows/ci.yml      # CI pipeline
+├── vitest.config.ts              # Test configuration
 └── package.json
 ```
 
@@ -206,6 +243,14 @@ Type `demo` in the wallet input to experience the full flow without any API keys
 | 41–60 | Casual Paper Hands | 📄 |
 | 61–80 | Professional Jeet | 🏃 |
 | 81–100 | Certified Degen Ruglord | 👑 |
+
+---
+
+## 🎬 Demo Video
+
+[![Watch the demo](docs/screenshots/01-landing.png)](https://youtu.be/K9sz9dNHa3w)
+
+**[▶️ Watch on YouTube](https://youtu.be/K9sz9dNHa3w)**
 
 ---
 
