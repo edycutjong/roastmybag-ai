@@ -792,47 +792,11 @@ export default function Home() {
     // Play whoosh SFX on submit
     sfx.whoosh();
 
-    // Allow "demo" keyword
-    if (trimmed.toLowerCase() === 'demo') {
-      setPhase('scanning');
-      setError('');
-      // Simulate scan
-      await new Promise((r) => setTimeout(r, 3000));
+    const isDemoKeyword = trimmed.toLowerCase() === 'demo';
+    const targetAddress = isDemoKeyword ? '0x0000000000000000000000000000000000000001' : trimmed;
 
-      const scanRes = await fetch('/api/scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address: '0x0000000000000000000000000000000000000001' }),
-      });
-      const scanData = await scanRes.json();
-      setStats(scanData.data);
-
-      // Generate roast
-      setPhase('roasting');
-      await new Promise((r) => setTimeout(r, 2000));
-
-      const roastRes = await fetch('/api/roast', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stats: scanData.data }),
-      });
-      const roastData = await roastRes.json();
-      setRoast(roastData.data);
-
-      // IMPACT! Screen shake + flash + confetti
-      sfx.impact();
-      setShowFlash(true);
-      setShake(true);
-      setTimeout(() => setShowFlash(false), 400);
-      setTimeout(() => setShake(false), 500);
-      fireConfetti();
-
-      setPhase('results');
-      return;
-    }
-
-    // Validate address
-    if (!/^0x[a-fA-F0-9]{40}$/.test(trimmed)) {
+    // Validate address if it's not the explicit demo keyword
+    if (!isDemoKeyword && !/^0x[a-fA-F0-9]{40}$/.test(trimmed)) {
       setError('Invalid BSC wallet address. Try pasting a 0x... address or type "demo".');
       return;
     }
@@ -841,11 +805,16 @@ export default function Home() {
     setPhase('scanning');
 
     try {
+      if (isDemoKeyword) {
+        // Aesthetic simulated delay for the demo
+        await new Promise((r) => setTimeout(r, 3000));
+      }
+
       // Scan wallet
       const scanRes = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address: trimmed }),
+        body: JSON.stringify({ address: targetAddress }),
       });
       const scanData = await scanRes.json();
 
@@ -858,6 +827,11 @@ export default function Home() {
       setStats(scanData.data);
       setPhase('roasting');
 
+      if (isDemoKeyword) {
+        // Aesthetic simulated delay for the demo
+        await new Promise((r) => setTimeout(r, 2000));
+      }
+
       // Generate roast
       const roastRes = await fetch('/api/roast', {
         method: 'POST',
@@ -865,9 +839,16 @@ export default function Home() {
         body: JSON.stringify({ stats: scanData.data }),
       });
       const roastData = await roastRes.json();
+
+      if (!roastData.success) {
+        setError(roastData.error || 'Failed to generate AI roast');
+        setPhase('landing');
+        return;
+      }
+
       setRoast(roastData.data);
 
-      // IMPACT!
+      // IMPACT! Screen shake + flash + confetti
       sfx.impact();
       setShowFlash(true);
       setShake(true);
@@ -876,7 +857,8 @@ export default function Home() {
       fireConfetti();
 
       setPhase('results');
-    } catch {
+    } catch (err) {
+      console.error(err);
       setError('Something went wrong. Try again.');
       setPhase('landing');
     }

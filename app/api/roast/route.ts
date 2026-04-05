@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if these are demo stats
-    const isDemo = stats.trades?.some(t => t.txHash?.includes('0xabc'));
+    const isDemo = stats.trades?.some((t: any) => t.txHash?.includes('...'));
 
     // Fallback to demo roast if no API key or it's explicit demo data
     if (!process.env.OPENAI_API_KEY || isDemo) {
