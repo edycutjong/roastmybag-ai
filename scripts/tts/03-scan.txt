@@ -1,0 +1,1 @@
+The engine scans your full memecoin history through BSC Scan, pulls live prices from Dex Screener, and calculates every single missed gain.

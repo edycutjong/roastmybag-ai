@@ -11,7 +11,10 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "ci": "npm run typecheck && npm run test:coverage"
+    "ci": "npm run typecheck && npm run test:coverage",
+    "demo:ss": "node scripts/capture-ss.mjs",
+    "demo:video": "node scripts/capture-video.mjs",
+    "demo": "npm run demo:ss && npm run demo:video"
   },
   "dependencies": {
     "framer-motion": "^12.38.0",
@@ -32,6 +35,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.2",
     "jsdom": "^29.0.1",
+    "playwright": "^1.59.1",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.1.2"
