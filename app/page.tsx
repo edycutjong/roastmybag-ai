@@ -775,6 +775,37 @@ function ResultsView({
   );
 }
 
+// ─── Footer Component ──────────────────────────────────────
+function Footer({ className = '' }: { className?: string }) {
+  return (
+    <footer className={`relative z-10 text-center py-8 text-sm text-[var(--text-muted)] border-t border-white/5 ${className}`}>
+      <p>
+        RoastMyBag.ai — Not financial advice. Just emotional damage. 💀
+      </p>
+      <p className="mt-1">
+        Powered by{' '}
+        <a
+          href="https://four.meme/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[var(--accent-fire)] hover:underline"
+        >
+          Four.Meme
+        </a>{' '}
+        ×{' '}
+        <a
+          href="https://www.bnbchain.org"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[var(--accent-gold)] hover:underline"
+        >
+          BNB Chain
+        </a>
+      </p>
+    </footer>
+  );
+}
+
 // ─── Main Page ─────────────────────────────────────────────
 export default function Home() {
   const [phase, setPhase] = useState<Phase>('landing');
@@ -1077,6 +1108,8 @@ export default function Home() {
                   Chain
                 </p>
               </motion.div>
+              
+              <Footer className="mt-auto pt-16 border-t-0" />
             </motion.div>
           )}
 
@@ -1084,11 +1117,15 @@ export default function Home() {
           {(phase === 'scanning' || phase === 'roasting') && (
             <motion.div
               key="loading"
+              className="flex-1 flex flex-col items-center justify-center h-full"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <LoadingScreen phase={phase} />
+              <div className="flex-1 flex flex-col justify-center">
+                <LoadingScreen phase={phase} />
+              </div>
+              <Footer className="w-full mt-auto" />
             </motion.div>
           )}
 
@@ -1096,42 +1133,17 @@ export default function Home() {
           {phase === 'results' && stats && roast && (
             <motion.div
               key="results"
+              className="flex-1 flex flex-col h-full"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
               <ResultsView stats={stats} roast={roast} onReset={handleReset} />
+              <Footer className="w-full mt-auto" />
             </motion.div>
           )}
         </AnimatePresence>
       </main>
-
-      {/* Footer */}
-      <footer className="relative z-10 text-center py-8 text-sm text-[var(--text-muted)] border-t border-white/5">
-        <p>
-          RoastMyBag.ai — Not financial advice. Just emotional damage. 💀
-        </p>
-        <p className="mt-1">
-          Powered by{' '}
-          <a
-            href="https://four.meme/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--accent-fire)] hover:underline"
-          >
-            Four.Meme
-          </a>{' '}
-          ×{' '}
-          <a
-            href="https://www.bnbchain.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[var(--accent-gold)] hover:underline"
-          >
-            BNB Chain
-          </a>
-        </p>
-      </footer>
     </div>
   );
 }
