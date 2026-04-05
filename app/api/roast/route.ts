@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSystemPrompt, buildUserMessage } from '@/lib/roast-prompt';
 import type { WalletStats, RoastResult } from '@/lib/types';
 import { getJeetTitle } from '@/lib/constants';
-import { DEMO_ROAST } from '@/lib/mock-data';
+import { DEMO_PROFILES } from '@/lib/demo-profiles';
 
 /**
  * POST /api/roast — Generate AI roast from wallet stats
@@ -16,12 +16,16 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing wallet stats' }, { status: 400 });
     }
 
-    // Fallback to demo roast if no API key
-    if (!process.env.OPENAI_API_KEY) {
+    // Check if these are demo stats
+    const isDemo = stats.trades?.some(t => t.txHash?.includes('0xabc'));
+
+    // Fallback to demo roast if no API key or it's explicit demo data
+    if (!process.env.OPENAI_API_KEY || isDemo) {
+      const match = DEMO_PROFILES.find(p => p.stats.totalMissedUsd === stats.totalMissedUsd) || DEMO_PROFILES[0];
       return NextResponse.json({
         success: true,
         demo: true,
-        data: { ...DEMO_ROAST, jeetScore: stats.jeetScore },
+        data: match.roast,
       });
     }
 
@@ -64,7 +68,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       demo: true,
-      data: DEMO_ROAST,
+      data: DEMO_PROFILES[0].roast,
     });
   }
 }
