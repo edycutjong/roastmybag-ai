@@ -884,7 +884,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={`relative min-h-screen bg-grid${shake ? ' screen-shake' : ''}`}>
+    <div className={`relative min-h-screen bg-grid overflow-x-hidden${shake ? ' screen-shake' : ''}`}>
       <CanvasFireBackground />
       <div className="scanline" />
 
