@@ -322,6 +322,7 @@ function ScoreRing({ score }: { score: number }) {
 function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
   const [msgIndex, setMsgIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const baseRef = useRef(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -330,18 +331,24 @@ function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
     return () => clearInterval(interval);
   }, []);
 
-  // Fake progress counter
+  // Continuous progress: scanning = 0→50%, roasting = 50→95%
   useEffect(() => {
-    const target = phase === 'scanning' ? 47 : 100;
+    const rangeStart = phase === 'scanning' ? 0 : 50;
+    const rangeEnd = phase === 'scanning' ? 50 : 95;
     const duration = phase === 'scanning' ? 3000 : 5000;
+    baseRef.current = rangeStart;
+
     const start = performance.now();
+    let raf: number;
     const tick = (now: number) => {
       const elapsed = now - start;
       const p = Math.min(elapsed / duration, 1);
-      setProgress(Math.round(p * target));
-      if (p < 1) requestAnimationFrame(tick);
+      const value = Math.round(rangeStart + p * (rangeEnd - rangeStart));
+      setProgress(value);
+      if (p < 1) raf = requestAnimationFrame(tick);
     };
-    requestAnimationFrame(tick);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [phase]);
 
   return (
@@ -398,9 +405,8 @@ function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
           <motion.div
             className="h-full rounded-full"
             style={{ background: 'linear-gradient(90deg, #ff4500, #ffd700)' }}
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
-            transition={{ duration: phase === 'scanning' ? 3 : 5, ease: 'linear' }}
+            animate={{ width: `${progress}%` }}
+            transition={{ duration: 0.3, ease: 'linear' }}
           />
         </div>
       </div>
