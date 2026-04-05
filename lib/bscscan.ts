@@ -1,14 +1,13 @@
 import type { TokenTransfer } from './types';
 
 const BASE_URL = 'https://deep-index.moralis.io/api/v2.2';
-const API_KEY = process.env.MORALIS_API_KEY;
-
 /**
  * Fetch all BEP-20 token transfers for a wallet address.
  */
 export async function fetchTokenTransfers(
   address: string
 ): Promise<TokenTransfer[]> {
+  const API_KEY = process.env.MORALIS_API_KEY;
   if (!API_KEY) {
     console.warn('[Moralis] No API key configured — returning empty results');
     return [];
