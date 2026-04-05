@@ -405,6 +405,7 @@ function LoadingScreen({ phase }: { phase: 'scanning' | 'roasting' }) {
           <motion.div
             className="h-full rounded-full"
             style={{ background: 'linear-gradient(90deg, #ff4500, #ffd700)' }}
+            initial={{ width: '0%' }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3, ease: 'linear' }}
           />
