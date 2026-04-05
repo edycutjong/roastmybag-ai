@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Use demo data if no API key or if address is the demo keyword trigger
-    if (!process.env.BSCSCAN_API_KEY || address === '0x0000000000000000000000000000000000000001') {
+    if (!process.env.MORALIS_API_KEY || address === '0x0000000000000000000000000000000000000001') {
       return NextResponse.json({
         success: true,
         demo: true,
@@ -31,9 +31,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, demo: false, data: stats });
   } catch (error) {
     console.error('[/api/scan] Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to analyze wallet' },
-      { status: 500 }
-    );
+    // Fallback to demo profile on any analysis error to ensure app keeps working
+    return NextResponse.json({
+      success: true,
+      demo: true,
+      data: getRandomDemoProfile().stats,
+    });
   }
 }

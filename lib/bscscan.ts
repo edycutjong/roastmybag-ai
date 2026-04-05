@@ -1,7 +1,7 @@
 import type { TokenTransfer } from './types';
 
-const BASE_URL = 'https://api.bscscan.com/api';
-const API_KEY = process.env.BSCSCAN_API_KEY;
+const BASE_URL = 'https://deep-index.moralis.io/api/v2.2';
+const API_KEY = process.env.MORALIS_API_KEY;
 
 /**
  * Fetch all BEP-20 token transfers for a wallet address.
@@ -10,28 +10,50 @@ export async function fetchTokenTransfers(
   address: string
 ): Promise<TokenTransfer[]> {
   if (!API_KEY) {
-    console.warn('[BSCScan] No API key configured — returning empty results');
+    console.warn('[Moralis] No API key configured — returning empty results');
     return [];
   }
 
-  const url = new URL(BASE_URL);
-  url.searchParams.set('module', 'account');
-  url.searchParams.set('action', 'tokentx');
-  url.searchParams.set('address', address);
-  url.searchParams.set('startblock', '0');
-  url.searchParams.set('endblock', '99999999');
-  url.searchParams.set('sort', 'desc');
-  url.searchParams.set('apikey', API_KEY);
+  const url = new URL(`${BASE_URL}/${address}/erc20/transfers`);
+  url.searchParams.set('chain', 'bsc');
+  url.searchParams.set('limit', '100'); // Fetch up to 100 recent transfers
 
-  const res = await fetch(url.toString());
-  const data = await res.json();
+  try {
+    const res = await fetch(url.toString(), {
+      headers: {
+        'accept': 'application/json',
+        'X-API-Key': API_KEY,
+      },
+    });
 
-  if (data.status !== '1' || !Array.isArray(data.result)) {
-    console.error('[BSCScan] API error:', data.message);
+    if (!res.ok) {
+      console.error('[Moralis] API error:', res.status, res.statusText);
+      return [];
+    }
+
+    const data = await res.json();
+
+    if (!data?.result || !Array.isArray(data.result)) {
+      return [];
+    }
+
+    // Map Moralis response to the local TokenTransfer struct type
+    return data.result.map((tx: any) => ({
+      hash: tx.transaction_hash,
+      from: tx.from_address,
+      to: tx.to_address,
+      tokenName: tx.token_name,
+      tokenSymbol: tx.token_symbol,
+      tokenDecimal: String(tx.token_decimals), // Note: Moralis gives 'token_decimals'
+      contractAddress: tx.address,
+      value: tx.value,
+      timeStamp: Math.floor(new Date(tx.block_timestamp).getTime() / 1000).toString(),
+      blockNumber: tx.block_number,
+    })) as TokenTransfer[];
+  } catch (err) {
+    console.error('[Moralis] Network or parsing error:', err);
     return [];
   }
-
-  return data.result as TokenTransfer[];
 }
 
 /**
