@@ -62,19 +62,31 @@ RoastMyBag.ai is an AI-powered **"wallet comedian"** that transforms your worst 
 
 ## ⚡ Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    Next.js 16 App Router                │
-│                     (React 19 + RSC)                    │
-├──────────┬──────────┬──────────┬─────────┬──────────────┤
-│ /api/scan│/api/roast│ /api/tts │ /api/og │   page.tsx   │
-│ Wallet   │ AI Roast │ Voice    │ OG Image│  SPA Client  │
-│ Analysis │ Gen      │ Synth    │ Gen     │  (4 phases)  │
-└────┬─────┴────┬─────┴────┬─────┴────┬────┴──────────────┘
-     │          │          │          │
-     ▼          ▼          ▼          ▼
-  BSCScan    OpenAI    ElevenLabs   Satori
-  DexScreener GPT-4o    TTS API    (ImageResponse)
+```mermaid
+graph TD
+    subgraph NextJS["Next.js 16 App Router (React 19 + RSC)"]
+        Client["page.tsx<br/>SPA Client (4 phases)"]
+        
+        API_Scan["/api/scan<br/>Wallet Analysis"]
+        API_Roast["/api/roast<br/>AI Roast Gen"]
+        API_TTS["/api/tts<br/>Voice Synth"]
+        API_OG["/api/og<br/>OG Image Gen"]
+    end
+
+    E1["BSCScan &<br/>DexScreener"]
+    E2["OpenAI<br/>GPT-4o"]
+    E3["ElevenLabs<br/>TTS API"]
+    E4["Satori<br/>(ImageResponse)"]
+
+    Client --> API_Scan
+    Client --> API_Roast
+    Client --> API_TTS
+    Client --> API_OG
+
+    API_Scan --> E1
+    API_Roast --> E2
+    API_TTS --> E3
+    API_OG --> E4
 ```
 
 ### Client Flow — 4-Phase SPA
