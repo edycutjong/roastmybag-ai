@@ -1013,6 +1013,7 @@ export default function Home() {
                     id="wallet-input"
                     autoComplete="off"
                     spellCheck={false}
+                    suppressHydrationWarning
                   />
                 </div>
 
