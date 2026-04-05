@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSystemPrompt, buildUserMessage } from '@/lib/roast-prompt';
-import type { WalletStats, RoastResult } from '@/lib/types';
+import type { WalletStats, RoastResult, AnalyzedTrade } from '@/lib/types';
 import { getJeetTitle } from '@/lib/constants';
 import { DEMO_PROFILES } from '@/lib/demo-profiles';
 
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if these are demo stats
-    const isDemo = stats.trades?.some((t: any) => t.txHash?.includes('...'));
+    const isDemo = stats.trades?.some((t: AnalyzedTrade) => t.txHash?.includes('...'));
 
     // Fallback to demo roast if no API key or it's explicit demo data
     if (!process.env.OPENAI_API_KEY || isDemo) {
@@ -29,12 +29,16 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const abortController = new AbortController();
+    const timeout = setTimeout(() => abortController.abort(), 15000);
+
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
       },
+      signal: abortController.signal,
       body: JSON.stringify({
         model: 'gpt-4o',
         messages: [
@@ -46,6 +50,7 @@ export async function POST(req: NextRequest) {
         response_format: { type: 'json_object' },
       }),
     });
+    clearTimeout(timeout);
 
     const data = await res.json();
     const content = data.choices?.[0]?.message?.content;

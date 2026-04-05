@@ -11,10 +11,14 @@ export async function generateSpeech(text: string): Promise<ArrayBuffer | null> 
   }
 
   try {
+    const abortController = new AbortController();
+    const timeout = setTimeout(() => abortController.abort(), 15000);
+
     const res = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
       {
         method: 'POST',
+        signal: abortController.signal,
         headers: {
           'Content-Type': 'application/json',
           'xi-api-key': apiKey,
@@ -31,9 +35,10 @@ export async function generateSpeech(text: string): Promise<ArrayBuffer | null> 
         }),
       }
     );
+    clearTimeout(timeout);
 
     if (!res.ok) {
-      console.error('[ElevenLabs] Error:', res.status, await res.text());
+        console.error('[ElevenLabs] Error:', res.status, await res.text());
       return null;
     }
 
