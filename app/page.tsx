@@ -923,7 +923,7 @@ export default function Home() {
         </motion.div>
         <div className="flex items-center gap-4">
           <a
-            href="https://fourmeme.com"
+            href="https://four.meme"
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-[var(--text-muted)] hover:text-white transition-colors"
@@ -1132,7 +1132,7 @@ export default function Home() {
         <p className="mt-1">
           Powered by{' '}
           <a
-            href="https://fourmeme.com"
+            href="https://fourmeme.com/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-[var(--accent-fire)] hover:underline"
