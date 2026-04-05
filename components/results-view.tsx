@@ -58,7 +58,7 @@ export function ScoreRing({ score }: { score: number }) {
         >
           {score}
         </motion.span>
-        <span className="text-xs text-[var(--text-muted)] mt-1">/ 100</span>
+        <span className="text-xs text-(--text-muted) mt-1">/ 100</span>
       </div>
     </div>
   );
@@ -96,15 +96,23 @@ export function TypewriterText({ text, delay = 0 }: { text: string; delay?: numb
   );
 }
 
-export function RoastBeats({ beats }: { beats: RoastBeat[] }) {
+export function RoastBeats({ beats, isPlaying, activeIndex }: { beats: RoastBeat[]; isPlaying: boolean; activeIndex: number }) {
   return (
     <div className="space-y-6">
-      {beats.map((beat, i) => (
+      {beats.map((beat, i) => {
+        const isTalking = isPlaying && activeIndex === i;
+        const isDimmed = isPlaying && !isTalking;
+
+        return (
         <motion.div
           key={i}
-          className="glass-card p-6 border-glow-pulse"
+          className={`glass-card p-6 transition-all duration-500 ${isTalking ? 'border-glow-playing z-10 relative' : isDimmed ? 'opacity-40 scale-[0.98]' : 'hover:border-white/20'}`}
           initial={{ opacity: 0, x: -30, scale: 0.95 }}
-          animate={{ opacity: 1, x: 0, scale: 1 }}
+          animate={{ 
+            opacity: isDimmed ? 0.4 : 1, 
+            x: 0, 
+            scale: isTalking ? 1.02 : isDimmed ? 0.98 : 1 
+          }}
           transition={{ delay: i * 1.2 + 0.5, duration: 0.6, type: 'spring', stiffness: 120 }}
         >
           <div className="flex items-start gap-4">
@@ -136,7 +144,8 @@ export function RoastBeats({ beats }: { beats: RoastBeat[] }) {
             </div>
           </div>
         </motion.div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -155,6 +164,49 @@ export default function ResultsView({
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [audioLoading, setAudioLoading] = useState(false);
+  const [activeBeatIndex, setActiveBeatIndex] = useState<number>(-1);
+
+  // Approximate TTS playback tracking for MP3 audio
+  useEffect(() => {
+    if (!isPlaying) {
+      setActiveBeatIndex(-1);
+      return;
+    }
+
+    let rafId: number;
+    const trackProgress = () => {
+      if (audioRef.current && !audioRef.current.paused && audioRef.current.duration > 0) {
+        const audio = audioRef.current;
+        const progress = audio.currentTime / audio.duration;
+        
+        // Approximate the length of each beat with some padding
+        const lengths = roast.beats.map((b) => b.text.length + (b.highlight?.length || 0) + 15);
+        const total = lengths.reduce((a, b) => a + b, 0);
+        const target = progress * total;
+        
+        let accum = 0;
+        let activeIdx = -1;
+        for (let i = 0; i < lengths.length; i++) {
+          accum += lengths[i];
+          if (target <= accum) {
+            activeIdx = i;
+            break;
+          }
+        }
+        
+        if (activeIdx !== activeBeatIndex) {
+            setActiveBeatIndex(activeIdx);
+        }
+      }
+      
+      if (isPlaying) {
+        rafId = requestAnimationFrame(trackProgress);
+      }
+    };
+
+    rafId = requestAnimationFrame(trackProgress);
+    return () => cancelAnimationFrame(rafId);
+  }, [isPlaying, roast.beats, activeBeatIndex]);
 
   useEffect(() => {
     sfx.chime();
@@ -166,11 +218,36 @@ export default function ResultsView({
     const utterance = new SpeechSynthesisUtterance(roast.script);
     utterance.rate = 1.1;
     utterance.pitch = 0.9;
-    utterance.onend = () => setIsPlaying(false);
-    utterance.onerror = () => setIsPlaying(false);
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setActiveBeatIndex(-1);
+    };
+    utterance.onerror = () => {
+      setIsPlaying(false);
+      setActiveBeatIndex(-1);
+    };
+    utterance.onboundary = (e) => {
+      if (e.name === 'word') {
+         const progress = e.charIndex / roast.script.length;
+         const lengths = roast.beats.map((b) => b.text.length + (b.highlight?.length || 0) + 15);
+         const total = lengths.reduce((a,b) => a+b, 0);
+         const target = progress * total;
+         
+         let accum = 0;
+         let activeIdx = -1;
+         for (let i = 0; i < lengths.length; i++) {
+           accum += lengths[i];
+           if (target <= accum) {
+             activeIdx = i;
+             break;
+           }
+         }
+         setActiveBeatIndex(activeIdx);
+      }
+    };
     window.speechSynthesis.speak(utterance);
     setIsPlaying(true);
-  }, [roast.script]);
+  }, [roast.script, roast.beats]);
 
   const handlePlayAudio = useCallback(async () => {
     if (isPlaying) {
@@ -270,7 +347,7 @@ export default function ResultsView({
           animate={{ opacity: 1, y: 0, rotateX: 0 }}
           transition={{ delay: 0.6, type: 'spring' }}
         >
-          <p className="text-sm text-[var(--text-muted)] mb-4 uppercase tracking-wider">
+          <p className="text-sm text-(--text-muted) mb-4 uppercase tracking-wider">
             Jeet Score
           </p>
           <ScoreRing score={roast.jeetScore} />
@@ -283,18 +360,18 @@ export default function ResultsView({
           transition={{ delay: 0.8, type: 'spring' }}
         >
           <div>
-            <p className="text-sm text-[var(--text-muted)] uppercase tracking-wider">
+            <p className="text-sm text-(--text-muted) uppercase tracking-wider">
               Total Left on Table
             </p>
-            <p className="text-3xl font-bold text-[var(--accent-gold)] mt-1">
+            <p className="text-3xl font-bold text-(--accent-gold) mt-1">
               $<AnimatedCounter value={stats.totalMissedUsd} />
             </p>
           </div>
           <div>
-            <p className="text-sm text-[var(--text-muted)] uppercase tracking-wider">
+            <p className="text-sm text-(--text-muted) uppercase tracking-wider">
               Tokens Jeeted
             </p>
-            <p className="text-3xl font-bold text-[var(--accent-red)] mt-1">
+            <p className="text-3xl font-bold text-(--accent-red) mt-1">
               <AnimatedCounter value={stats.tokensJeeted} />
             </p>
           </div>
@@ -306,7 +383,7 @@ export default function ResultsView({
           animate={{ opacity: 1, y: 0, rotateX: 0 }}
           transition={{ delay: 1, type: 'spring' }}
         >
-          <p className="text-sm text-[var(--text-muted)] uppercase tracking-wider">
+          <p className="text-sm text-(--text-muted) uppercase tracking-wider">
             Worst Paper-Hand
           </p>
           {stats.worstSell ? (
@@ -314,15 +391,15 @@ export default function ResultsView({
               <p className="text-2xl font-bold text-white">
                 ${stats.worstSell.tokenSymbol}
               </p>
-              <p className="text-lg text-[var(--accent-red)] mt-1">
+              <p className="text-lg text-(--accent-red) mt-1">
                 Missed $<AnimatedCounter value={stats.worstSell.missedGains} />
               </p>
-              <p className="text-sm text-[var(--text-muted)] mt-2">
+              <p className="text-sm text-(--text-muted) mt-2">
                 Sold {stats.worstSell.sellDate}
               </p>
             </div>
           ) : (
-            <p className="text-lg text-[var(--text-secondary)] mt-3">
+            <p className="text-lg text-(--text-secondary) mt-3">
               No sells found (sus 🤔)
             </p>
           )}
@@ -352,7 +429,7 @@ export default function ResultsView({
             )}
           </button>
         </div>
-        <RoastBeats beats={roast.beats} />
+        <RoastBeats beats={roast.beats} isPlaying={isPlaying} activeIndex={activeBeatIndex} />
       </motion.div>
 
       {stats.trades.length > 0 && (
@@ -367,7 +444,7 @@ export default function ResultsView({
             {stats.trades.map((trade, i) => (
               <motion.div
                 key={i}
-                className="damage-row flex items-center justify-between p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300 cursor-default"
+                className="damage-row flex items-center justify-between p-4 rounded-xl bg-white/2 hover:bg-white/4 transition-all duration-300 cursor-default"
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.5 + i * 0.15 }}
@@ -382,16 +459,16 @@ export default function ResultsView({
                   </motion.span>
                   <div>
                     <p className="font-semibold text-white">${trade.tokenSymbol}</p>
-                    <p className="text-sm text-[var(--text-muted)]">
+                    <p className="text-sm text-(--text-muted)">
                       Sold {trade.sellDate}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-bold text-[var(--accent-red)]">
+                  <p className="text-lg font-bold text-(--accent-red)">
                     -${trade.missedGains.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                   </p>
-                  <p className="text-xs text-[var(--text-muted)]">
+                  <p className="text-xs text-(--text-muted)">
                     {trade.amountSold.toLocaleString()} tokens
                   </p>
                 </div>
@@ -408,7 +485,10 @@ export default function ResultsView({
         transition={{ delay: 2 }}
       >
         <motion.button
-          onClick={onReset}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            onReset();
+          }}
           className="btn-fire px-8 py-4 text-lg"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
