@@ -16,11 +16,11 @@ export async function analyzeWallet(address: string): Promise<WalletStats> {
     (tx) => !STABLECOIN_ADDRESSES.has(tx.contractAddress.toLowerCase())
   );
 
-  // Identify sell events (transfers FROM wallet TO DEX routers)
+  // Identify sell events (ANY transfer OUT of the wallet)
+  // Since we don't know all LP pair addresses, any time a user transfers a memecoin out, 
+  // we count it as "paper handing" for the sake of the roast!
   const sells = memeTransfers.filter(
-    (tx) =>
-      tx.from.toLowerCase() === walletLower &&
-      DEX_ROUTER_ADDRESSES.has(tx.to.toLowerCase())
+    (tx) => tx.from.toLowerCase() === walletLower
   );
 
   if (sells.length === 0) {
