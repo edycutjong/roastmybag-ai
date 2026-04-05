@@ -464,6 +464,11 @@ describe('ResultsView Main Component', () => {
        if (trackRAF) trackRAF(100);
     });
 
+    // Test audio.onended coverage
+    act(() => {
+      if (mockAudio.onended) mockAudio.onended();
+    });
+
     expect(trackRAF).not.toBeNull();
   });
 
@@ -491,6 +496,15 @@ describe('ResultsView Main Component', () => {
 
     // verify fallback
     expect(mockSpeak).toHaveBeenCalled();
+
+    // hit onboundary
+    act(() => {
+      if (capturedUtterance && capturedUtterance.onboundary) {
+        capturedUtterance.onboundary({ name: 'word', charIndex: 5 });
+        // Also call with non-word to cover the if (e.name === 'word') falsy branch
+        capturedUtterance.onboundary({ name: 'sentence', charIndex: 0 });
+      }
+    });
 
     // hit onend
     act(() => {

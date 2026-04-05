@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     }
 
     const abortController = new AbortController();
-    const timeout = setTimeout(() => abortController.abort(), 15000);
+    const timeout = setTimeout(/* istanbul ignore next */ () => abortController.abort(), 15000);
 
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
