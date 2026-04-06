@@ -4,7 +4,23 @@
 
 **RoastMyBag.ai** is an AI voice agent that scans your BNB Chain wallet, calculates missed gains, and brutally roasts you for selling memecoins too early. Built for the **[Four.Meme AI Sprint](https://four.meme/)** on BNB Chain.
 
+<!-- CI & Security -->
 [![CI](https://github.com/edycutjong/roastmybag-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions)
+[![CodeQL](https://github.com/edycutjong/roastmybag-ai/actions/workflows/codeql.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions/workflows/codeql.yml)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/edycutjong/roastmybag-ai/badge)](https://scorecard.dev/viewer/?uri=github.com/edycutjong/roastmybag-ai)
+<!-- Tech Stack -->
+[![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![GPT-4o](https://img.shields.io/badge/OpenAI-GPT--4o-412991?logo=openai&logoColor=white)](https://openai.com/)
+[![ElevenLabs](https://img.shields.io/badge/ElevenLabs-TTS-000000?logo=elevenlabs&logoColor=white)](https://elevenlabs.io/)
+[![BNB Chain](https://img.shields.io/badge/BNB_Chain-F0B90B?logo=bnbchain&logoColor=black)](https://www.bnbchain.org/)
+<!-- Quality & Meta -->
+[![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen?logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Deploy](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel)](https://vercel.com/)
+[![Hackathon](https://img.shields.io/badge/Four.Meme-AI_Sprint-FF6B35?style=flat)](https://four.meme/)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
 <p align="center">
   <a href="https://youtu.be/K9sz9dNHa3w">
