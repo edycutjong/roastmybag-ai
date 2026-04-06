@@ -18,9 +18,11 @@
 [![BNB Chain](https://img.shields.io/badge/BNB_Chain-F0B90B?logo=bnbchain&logoColor=black)](https://www.bnbchain.org/)
 <!-- Quality & Meta -->
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen?logo=vitest&logoColor=white)](https://vitest.dev/)
-[![Deploy](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel)](https://vercel.com/)
+[![Deploy](https://img.shields.io/badge/Vercel-Live-black?logo=vercel)](https://roastmybag.edycu.dev)
 [![Hackathon](https://img.shields.io/badge/Four.Meme-AI_Sprint-FF6B35?style=flat)](https://four.meme/)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
+
+**[🔥 Try it live → roastmybag.edycu.dev](https://roastmybag.edycu.dev)**
 
 <p align="center">
   <a href="https://youtu.be/K9sz9dNHa3w">
