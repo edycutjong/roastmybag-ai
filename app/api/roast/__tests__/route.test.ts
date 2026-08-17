@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 import { NextRequest } from 'next/server';
 import { POST } from '../route';
 import { DEMO_PROFILES } from '@/lib/demo-profiles';
-import * as constants from '@/lib/constants';
 
 vi.mock('@/lib/constants', () => ({
   getJeetTitle: vi.fn().mockReturnValue({ title: 'Mocked Jeet Title' })

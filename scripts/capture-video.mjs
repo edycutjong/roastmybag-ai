@@ -61,7 +61,7 @@ if (!fs.existsSync(outputDir)) {
       document.body.appendChild(el);
     });
 
-  } catch (err) {
+  } catch {
     console.error("❌ Failed to reach localhost:3000. Is your dev server running?");
     process.exit(1);
   }

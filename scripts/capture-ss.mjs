@@ -29,7 +29,7 @@ if (!fs.existsSync(outputDir)) {
     await page.goto("http://localhost:3000", { waitUntil: "networkidle" });
     // Hide the floating Next.js dev build indicator / portal
     await page.addStyleTag({ content: 'nextjs-portal, #__next-build-indicator, [data-nextjs-toast] { display: none !important; }' });
-  } catch (err) {
+  } catch {
     console.error("❌ Failed to reach localhost:3000. Is your dev server running?");
     process.exit(1);
   }

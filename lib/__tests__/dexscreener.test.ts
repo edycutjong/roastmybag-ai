@@ -94,12 +94,10 @@ describe('dexscreener', () => {
       // Mock fetchCurrentPrice indirectly by mocking fetch, or we can just mock the implementation of fetch
       // Let's create an array of 35 addresses to test chunking
       const addresses = Array.from({ length: 35 }, (_, i) => `0x${i}`);
-      
-      const mockResponses = addresses.map(addr => ({
-        pairs: [{ chainId: 'bsc', priceUsd: '1.0', liquidity: { usd: 1000 } }]
-      }));
 
-      vi.mocked(global.fetch).mockImplementation(async (url) => {
+      // Every address resolves to the same priced pair — this test is about
+      // the chunking behaviour, not per-address pricing.
+      vi.mocked(global.fetch).mockImplementation(async () => {
         return {
           json: async () => ({
             pairs: [{ chainId: 'bsc', priceUsd: '2.0', liquidity: { usd: 1000 } }]

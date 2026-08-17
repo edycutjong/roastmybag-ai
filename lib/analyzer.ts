@@ -1,5 +1,5 @@
 import type { AnalyzedTrade, WalletStats } from './types';
-import { STABLECOIN_ADDRESSES, DEX_ROUTER_ADDRESSES } from './constants';
+import { STABLECOIN_ADDRESSES } from './constants';
 import { fetchTokenTransfers } from './bscscan';
 import { fetchPrices } from './dexscreener';
 
