@@ -229,7 +229,7 @@ Open [http://localhost:3000](http://localhost:3000) and type `demo` to get roast
 
 ## 🧪 Testing & CI
 
-**110 unit tests at 100% coverage · 48 E2E tests · 6-stage CI pipeline.**
+**121 unit tests at 100% coverage · 48 E2E tests · 6-stage CI pipeline.**
 Full measured receipts, including what is *not* measured, live in **[DEMO.md](DEMO.md)**.
 
 ```bash
@@ -251,7 +251,7 @@ npm run ci:full       # ci + build + e2e
 | Layer | Tool | Status |
 |---|---|---|
 | Code quality | ESLint + TypeScript | ✅ |
-| Unit testing | Vitest — 110 tests, 100% coverage | ✅ |
+| Unit testing | Vitest — 121 tests, 100% coverage | ✅ |
 | Exhaustive verification | 30,001 enumerated cases | ✅ |
 | Permission boundary | credential-leak assertions | ✅ |
 | E2E testing | Playwright — 48 tests, 2 viewports | ✅ |

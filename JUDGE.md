@@ -29,7 +29,7 @@ failed its purpose.
 
 | Metric | Value | Detail |
 |---|---|---|
-| Unit tests | **110 passing** | 21 files, 0 skipped |
+| Unit tests | **121 passing** | 22 files, 0 skipped |
 | Coverage | **100%** | statements · branches · functions · lines |
 | E2E tests | **48 passing** | Playwright, desktop + mobile viewports |
 | Exhaustive verification | **30,001 cases** | Jeet Score → tier mapping, whole input space |
@@ -69,7 +69,7 @@ npm run dev                  # → http://localhost:3000
 the product:
 
 ```bash
-npm run ci     # audit + lint + typecheck + 110 tests @ 100% coverage
+npm run ci     # audit + lint + typecheck + 121 tests @ 100% coverage
 npm run e2e    # 48 Playwright tests, desktop + mobile
 ```
 

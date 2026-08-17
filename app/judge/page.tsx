@@ -13,7 +13,7 @@ const REPO = 'https://github.com/edycutjong/roastmybag-ai';
 const VIDEO = 'https://youtu.be/K9sz9dNHa3w';
 
 const receipts: Array<{ label: string; value: string; note: string }> = [
-  { label: 'Unit tests', value: '110 passing', note: '21 files, 0 skipped' },
+  { label: 'Unit tests', value: '121 passing', note: '22 files, 0 skipped' },
   { label: 'Coverage', value: '100%', note: 'statements · branches · functions · lines' },
   { label: 'E2E tests', value: '48 passing', note: 'Playwright, desktop + mobile viewports' },
   { label: 'Exhaustive verification', value: '30,001 cases', note: 'Jeet Score → tier mapping, whole input space' },
@@ -124,7 +124,7 @@ npm run dev                  # → http://localhost:3000`}
           the product:
         </p>
         <pre className="overflow-x-auto rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] p-4 font-mono text-sm text-[#e8e8e8]">
-{`npm run ci     # audit + lint + typecheck + 110 tests @ 100% coverage
+{`npm run ci     # audit + lint + typecheck + 121 tests @ 100% coverage
 npm run e2e    # 48 Playwright tests, desktop + mobile
 `}
         </pre>

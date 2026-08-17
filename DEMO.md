@@ -59,6 +59,30 @@ failed the same way. Latent in production (scores are rounded before display), b
 Fixed in `lib/constants.ts`; pinned by five named regression tests in
 `lib/__tests__/regressions.test.ts`. Integer behaviour is unchanged, which is itself asserted.
 
+## 2b · Property-based testing — 11,000 generated cases
+
+```bash
+npx vitest run lib/__tests__/properties.test.ts
+```
+
+Enumeration (§2) proves a *bounded* space is fully correct. Properties attack the unbounded ones —
+arbitrary strings, arbitrary doubles, and hostile wallet data — using `fast-check`, at 1,000
+generated cases per property across 11 properties. Counterexamples shrink to a minimal
+reproduction.
+
+| Function | Properties held |
+|---|---|
+| `isValidBscAddress` | never throws on any string; accepts every canonical `0x` + 40-hex in any case; rejects every non-40 length; rejects surrounding whitespace (guards the regex anchors) |
+| `getJeetTitle` | total over all doubles; monotonic; agrees with its own clamp for all finite input |
+| `buildUserMessage` | never throws on any stats incl. `NaN`/`Infinity`/empty; always emits the structural fields the system prompt parses; never lists more than the top 5 trades; reports `None` exactly when there are no trades |
+
+`buildUserMessage` matters most here: token names and symbols come from on-chain metadata, so they
+are **attacker-influenced strings flowing into an LLM prompt**. The properties assert the builder
+survives arbitrary input without throwing and without losing its structural markers.
+
+> This also satisfies the OpenSSF Scorecard **Fuzzing** check, which recognises `fast-check`
+> property-based testing for JavaScript/TypeScript.
+
 ## 3 · Permission boundary — credentials never reach the browser
 
 ```bash
