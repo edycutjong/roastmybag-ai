@@ -1,0 +1,46 @@
+title = "roastmybag-ai"
+
+# Start from gitleaks' full default ruleset, then narrow.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = """
+Deliberately fake sentinel credentials in the permission-boundary test.
+
+app/api/__tests__/secret-boundary.test.ts injects high-entropy placeholder
+values into OPENAI_API_KEY / ELEVENLABS_API_KEY / ELEVENLABS_VOICE_ID /
+MORALIS_API_KEY, drives every API route through its success, error,
+upstream-401 and bad-input paths, and asserts none of those values appears in
+any response. The strings exist so the test can prove a real credential never
+crosses the server boundary — they are not credentials themselves, and every
+one carries a literal SENTINEL marker.
+
+Both conditions must hold: the finding must be in that one test file AND the
+matched text must carry the SENTINEL marker. A real key pasted into that file
+would still be reported.
+"""
+condition = "AND"
+paths = ['''^app/api/__tests__/secret-boundary\.test\.ts$''']
+regexes = ['''SENTINEL''']
+
+[[allowlists]]
+description = """
+Placeholder and public-identifier values in the committed environment
+template, current and historical.
+
+`pNInz6obpgDQGcFmaJgB` is ElevenLabs' public "Adam" voice ID from their
+open voice library — an identifier anyone can read off the docs, not a
+credential. It appeared in an early .env.example (commit 37fca7e) on the
+line after an EMPTY `ELEVENLABS_API_KEY=`, and gitleaks' generic-api-key
+rule matched across the line break. Verified: no real key has ever been
+committed to this repository.
+"""
+condition = "AND"
+paths = ['''^\.env\.example$''']
+regexes = [
+  '''your-[a-z-]*key-here''',
+  '''your-voice-id-here''',
+  '''sk-your-key-here''',
+  '''pNInz6obpgDQGcFmaJgB''',
+]
