@@ -37,6 +37,7 @@ failed its purpose.
 | Lighthouse accessibility | **98 / 100** | landing / judge — hard gate at 90 |
 | CI pipeline | **6 stages** | quality · security · build · e2e · perf · gate |
 | Open security alerts | **0** | CodeQL · Dependabot · secret scanning · gitleaks |
+| OpenSSF Best Practices | **passing** | 67/67 criteria · [project 14115](https://www.bestpractices.dev/projects/14115) |
 
 Every number above is reproducible from the commands in §04. See [DEMO.md](DEMO.md) for how each
 was measured and what is **not** measured.

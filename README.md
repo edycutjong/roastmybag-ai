@@ -9,6 +9,7 @@
 [![CodeQL](https://github.com/edycutjong/roastmybag-ai/actions/workflows/codeql.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/edycutjong/roastmybag-ai/badge)](https://scorecard.dev/viewer/?uri=github.com/edycutjong/roastmybag-ai)
 [![gitleaks](https://github.com/edycutjong/roastmybag-ai/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions/workflows/gitleaks.yml)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/14115/badge)](https://www.bestpractices.dev/projects/14115)
 <!-- Tech Stack -->
 [![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)

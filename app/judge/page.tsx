@@ -21,6 +21,7 @@ const receipts: Array<{ label: string; value: string; note: string }> = [
   { label: 'Lighthouse accessibility', value: '98 / 100', note: 'landing / judge — hard gate at 90' },
   { label: 'CI pipeline', value: '6 stages', note: 'quality · security · build · e2e · perf · gate' },
   { label: 'Open security alerts', value: '0', note: 'CodeQL · Dependabot · secret scanning · gitleaks' },
+  { label: 'OpenSSF Best Practices', value: 'passing', note: 'all criteria met — project 14115' },
 ];
 
 const steps: Array<{ text: string; href?: string; label?: string }> = [
