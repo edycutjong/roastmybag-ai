@@ -8,6 +8,7 @@
 [![CI](https://github.com/edycutjong/roastmybag-ai/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions)
 [![CodeQL](https://github.com/edycutjong/roastmybag-ai/actions/workflows/codeql.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions/workflows/codeql.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/edycutjong/roastmybag-ai/badge)](https://scorecard.dev/viewer/?uri=github.com/edycutjong/roastmybag-ai)
+[![gitleaks](https://github.com/edycutjong/roastmybag-ai/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/edycutjong/roastmybag-ai/actions/workflows/gitleaks.yml)
 <!-- Tech Stack -->
 [![Next.js](https://img.shields.io/badge/Next.js-16.2-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=white)](https://react.dev/)
@@ -23,6 +24,10 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat)](LICENSE)
 
 **[🔥 Try it live → roastmybag.edycu.dev](https://roastmybag.edycu.dev)**
+
+**Judging this?** Start at **[roastmybag.edycu.dev/judge](https://roastmybag.edycu.dev/judge)** —
+the claim, a 30-second click path, verified receipts, and honest limitations on one page.
+No auth, no setup. Mirrored in [JUDGE.md](JUDGE.md).
 
 <p align="center">
   <a href="https://youtu.be/K9sz9dNHa3w">
@@ -222,32 +227,52 @@ Open [http://localhost:3000](http://localhost:3000) and type `demo` to get roast
 
 ---
 
-## 🧪 Testing
+## 🧪 Testing & CI
 
-The project targets **100% code coverage** across all source files.
+**110 unit tests at 100% coverage · 48 E2E tests · 6-stage CI pipeline.**
+Full measured receipts, including what is *not* measured, live in **[DEMO.md](DEMO.md)**.
 
 ```bash
-# Run all tests
-npm test
+# ── Code quality ────────────────────────────
+npm run lint          # ESLint
+npm run typecheck     # tsc --noEmit
+npm test              # Vitest
+npm run test:coverage # coverage report
+npm run audit         # npm audit --audit-level=high
+npm run ci            # audit + lint + typecheck + coverage
 
-# Run with coverage report
-npm run test:coverage
-
-# Type check
-npm run typecheck
-
-# Lint
-npm run lint
-
-# Full CI pipeline (typecheck + test:coverage)
-npm run ci
+# ── Advanced ────────────────────────────────
+npm run e2e           # Playwright (desktop + mobile)
+npm run e2e:ui        # Playwright interactive
+npm run lighthouse    # Lighthouse CI
+npm run ci:full       # ci + build + e2e
 ```
+
+| Layer | Tool | Status |
+|---|---|---|
+| Code quality | ESLint + TypeScript | ✅ |
+| Unit testing | Vitest — 110 tests, 100% coverage | ✅ |
+| Exhaustive verification | 30,001 enumerated cases | ✅ |
+| Permission boundary | credential-leak assertions | ✅ |
+| E2E testing | Playwright — 48 tests, 2 viewports | ✅ |
+| Security (SAST) | CodeQL | ✅ |
+| Security (SCA) | Dependabot + `npm audit` | ✅ |
+| Secret scanning | GitHub push protection + gitleaks (full history) | ✅ |
+| Supply chain | OpenSSF Scorecard, all actions SHA-pinned | ✅ |
+| Performance | Lighthouse CI + bundle budget | ✅ |
 
 **Test architecture:**
 - **Unit tests** for all `lib/` modules (API clients, analyzer, constants, prompts)
 - **Component tests** for all `components/` (canvas-fire, confetti, results-view, sfx-engine)
 - **Integration tests** for all API routes (`/api/scan`, `/api/roast`, `/api/tts`, `/api/og`)
 - **Page tests** for layout and main page state machine
+- **Regression tests** each named after the defect it pins (`lib/__tests__/regressions.test.ts`)
+- **One exhaustive verification** of the Jeet Score → tier mapping across its whole input space
+- **One permission-boundary test** proving no provider credential can reach the browser
+
+> Two of these found real bugs: a fractional Jeet Score between two tiers reported the *harshest*
+> title instead of the mildest, and the landing page could be swiped 113px sideways on a 375px
+> screen. Both fixed — details in [DEMO.md](DEMO.md).
 
 ---
 

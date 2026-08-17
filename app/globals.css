@@ -25,12 +25,19 @@
 
 html {
   scroll-behavior: smooth;
+  /* `overflow-x: hidden` on <body> alone does NOT stop the page scrolling
+     sideways — the viewport scroll lives on <html>. The decorative
+     .hero-glow is 600px wide and offset past the left edge, so on a 375px
+     screen the page could be swiped 113px to the right into dead space.
+     `clip` suppresses that without creating a scroll container, so
+     position: sticky elsewhere keeps working. */
+  overflow-x: clip;
 }
 
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ─── Animated Background ───────────────────────────────── */

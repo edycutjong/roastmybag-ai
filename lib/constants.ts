@@ -24,10 +24,29 @@ export const JEET_TIERS = [
 ] as const;
 
 export function getJeetTitle(score: number): { title: string; emoji: string } {
-  return (
-    JEET_TIERS.find((t) => score >= t.min && score <= t.max) ??
-    JEET_TIERS[JEET_TIERS.length - 1]
-  );
+  // Non-finite input has no meaningful tier. Fail benign rather than branding
+  // an unknown score with the harshest title.
+  if (!Number.isFinite(score)) return JEET_TIERS[0];
+
+  // Clamp, then match on contiguous half-open bands [min, max + 1).
+  //
+  // The tier table lists inclusive integer bounds (0-20, 21-40, ...), so a
+  // literal `score >= min && score <= max` test leaves a gap between every
+  // pair of tiers: 20.5 matched no tier and fell through to the `??`
+  // fallback — the LAST tier — labelling a near-perfect score
+  // "Certified Degen Ruglord". Negatives and scores above 100 fell through
+  // the same way. Integer behaviour is unchanged by this fix.
+  const clamped = Math.min(100, Math.max(0, score));
+
+  // The bands are contiguous, and JEET_TIERS[0].min is 0 while clamped >= 0,
+  // so "the last tier whose lower bound we have reached" is exactly the
+  // containing band — and it always exists. That removes the unreachable
+  // fallback the previous `find(...) ?? last` form required.
+  let match: (typeof JEET_TIERS)[number] = JEET_TIERS[0];
+  for (const tier of JEET_TIERS) {
+    if (clamped >= tier.min) match = tier;
+  }
+  return match;
 }
 
 // ─── Loading Messages ──────────────────────────────────────

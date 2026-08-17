@@ -11,7 +11,12 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "ci": "npm run typecheck && npm run test:coverage",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
+    "lighthouse": "lhci autorun",
+    "audit": "npm audit --audit-level=high",
+    "ci": "npm run audit && npm run lint && npm run typecheck && npm run test:coverage",
+    "ci:full": "npm run ci && npm run build && npm run e2e",
     "demo:ss": "node scripts/capture-ss.mjs",
     "demo:video": "node scripts/capture-video.mjs",
     "demo": "npm run demo:ss && npm run demo:video"
@@ -23,6 +28,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

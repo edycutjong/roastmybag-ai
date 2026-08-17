@@ -1,18 +1,11 @@
 version: 2
-updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 10
-    groups:
-      dev-dependencies:
-        dependency-type: "development"
-      production-dependencies:
-        dependency-type: "production"
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 5
+# This project is a completed, judged hackathon submission with a live
+# production deploy. The repo is a frozen artifact, so dependency VERSION
+# updates are intentionally disabled — churn here can only break the demo
+# that judges click, and buys nothing in return.
+#
+# Dependabot SECURITY alerts and automated security fixes are a separate
+# repo setting and remain ENABLED. Vulnerabilities still get reported and
+# patched; routine version bumps do not.
+updates: []

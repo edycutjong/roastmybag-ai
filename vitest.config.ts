@@ -8,6 +8,9 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
+    // e2e/ is Playwright's; its `test` import is not a vitest runner, so the
+    // default spec glob must not reach it.
+    exclude: ['node_modules', '.next', 'e2e/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'json-summary'],

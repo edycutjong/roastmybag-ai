@@ -25,10 +25,15 @@ describe('constants', () => {
       expect(getJeetTitle(100).title).toBe('Certified Degen Ruglord');
     });
 
-    it('returns highest tier for scores above 100 or negative (fallback)', () => {
-      // Because find returns undefined for scores > 100 or < 0
+    it('clamps out-of-range scores into the tier table', () => {
+      // Previously both of these landed on the last tier via the `??`
+      // fallback, because `find` returned undefined for anything outside
+      // [0, 100]. That was correct-by-accident above 100 and plainly wrong
+      // below 0 — a negative score reported the harshest title. Scores are
+      // now clamped into range before matching. See
+      // lib/__tests__/regressions.test.ts.
       expect(getJeetTitle(150).title).toBe('Certified Degen Ruglord');
-      expect(getJeetTitle(-10).title).toBe('Certified Degen Ruglord');
+      expect(getJeetTitle(-10).title).toBe('Diamond Hands Legend');
     });
   });
 });
