@@ -111,7 +111,26 @@ du -sk .next/static
 | Budget | 1,500 KB warn · 2,000 KB fail |
 | Routes | 3 static (`/`, `/judge`, `/_not-found`), 4 dynamic API |
 
-## 6 · Live deployment
+## 6 · Lighthouse CI
+
+Measured by the Stage 5 job of CI run
+[32009628669](https://github.com/edycutjong/roastmybag-ai/actions/runs/32009628669),
+desktop preset, 3 runs per URL against the production build.
+
+| URL | Performance | Accessibility | Best practices | SEO |
+|---|---|---|---|---|
+| `/` | 87 | **98** | 100 | 100 |
+| `/judge` | 100 | **100** | 100 | 100 |
+| **Gate** | ≥80 warn | **≥90 error** | ≥85 warn | ≥90 warn |
+
+Accessibility is the only hard gate (`error`); both pages clear it. Thresholds live in
+`lighthouserc.json`.
+
+```bash
+npm run build && npm run lighthouse
+```
+
+## 7 · Live deployment
 
 ```bash
 curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://roastmybag.edycu.dev
@@ -121,7 +140,7 @@ curl -s -o /dev/null -w "%{http_code} %{time_total}s\n" https://roastmybag.edycu
 200 0.884435s
 ```
 
-## 7 · Security posture
+## 8 · Security posture
 
 | Surface | Open alerts |
 |---|---|

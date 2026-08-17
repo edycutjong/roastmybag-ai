@@ -18,6 +18,7 @@ const receipts: Array<{ label: string; value: string; note: string }> = [
   { label: 'E2E tests', value: '48 passing', note: 'Playwright, desktop + mobile viewports' },
   { label: 'Exhaustive verification', value: '30,001 cases', note: 'Jeet Score → tier mapping, whole input space' },
   { label: 'Static bundle', value: '904 KB', note: 'budget 1,500 KB warn / 2,000 KB fail' },
+  { label: 'Lighthouse accessibility', value: '98 / 100', note: 'landing / judge — hard gate at 90' },
   { label: 'CI pipeline', value: '6 stages', note: 'quality · security · build · e2e · perf · gate' },
   { label: 'Open security alerts', value: '0', note: 'CodeQL · Dependabot · secret scanning · gitleaks' },
 ];

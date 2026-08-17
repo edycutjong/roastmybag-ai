@@ -34,6 +34,7 @@ failed its purpose.
 | E2E tests | **48 passing** | Playwright, desktop + mobile viewports |
 | Exhaustive verification | **30,001 cases** | Jeet Score → tier mapping, whole input space |
 | Static bundle | **904 KB** | budget 1,500 KB warn / 2,000 KB fail |
+| Lighthouse accessibility | **98 / 100** | landing / judge — hard gate at 90 |
 | CI pipeline | **6 stages** | quality · security · build · e2e · perf · gate |
 | Open security alerts | **0** | CodeQL · Dependabot · secret scanning · gitleaks |
 
